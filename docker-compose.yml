@@ -1,0 +1,37 @@
+services:
+  mongodb:
+    image: mongo:6.0.18
+    container_name: lnbot-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: livechat
+      MONGO_INITDB_ROOT_PASSWORD: live123
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - lnbot-network
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: lnbot-mongo-express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: livechat
+      ME_CONFIG_MONGODB_ADMINPASSWORD: live123
+      ME_CONFIG_MONGODB_URL: mongodb://livechat:live123@mongodb:27017/
+      ME_CONFIG_BASICAUTH: false
+    depends_on:
+      - mongodb
+    networks:
+      - lnbot-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  lnbot-network:
+    driver: bridge

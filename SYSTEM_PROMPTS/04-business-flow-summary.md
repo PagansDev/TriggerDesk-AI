@@ -1,0 +1,1 @@
+# Descrição detalhada de toda regra de negócio e fluxo de usuário, problemas comuns e soluções, FAQ, Links de tutoriais e etc.

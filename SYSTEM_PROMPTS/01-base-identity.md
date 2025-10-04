@@ -1,0 +1,1 @@
+# Definição da identidade da IA, como cargo, atuação, nível de experiência
