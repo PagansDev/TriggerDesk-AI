@@ -19,7 +19,7 @@ Sistema de chat em tempo real com integração de IA especializada para atendime
 ## Estrutura do Projeto
 
 ```
-lnbot-livechat/
+pagansdev-livechat/
 ├── src/                      # Código fonte da aplicação
 │   ├── app.ts               # Inicialização do Express + Socket.IO
 │   ├── config/
@@ -146,7 +146,7 @@ Configure as variáveis no arquivo `.env`:
 
 ```env
 # MongoDB
-MONGODB_URI=mongodb://livechat:live123@localhost:27017/lnbot_livechat?authSource=admin
+MONGODB_URI=mongodb://livechat:live123@localhost:27017/pagansdev_livechat?authSource=admin
 
 # Servidor
 PORT=3037
