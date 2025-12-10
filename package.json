@@ -1,5 +1,5 @@
 {
-  "name": "lnbot-livechat",
+  "name": "pagansdev-livechat",
   "version": "1.0.0",
   "type": "module",
   "main": "src/app.ts",
@@ -12,15 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lnbot-app/lnbot-livechat.git"
+    "url": "git+https://github.com/pagansdev/pagansdev-livechat.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/lnbot-app/lnbot-livechat/issues"
+    "url": "https://github.com/pagansdev/pagansdev-livechat/issues"
   },
-  "homepage": "https://github.com/lnbot-app/lnbot-livechat#readme",
+  "homepage": "https://github.com/pagansdev/pagansdev-livechat#readme",
   "description": "",
   "dependencies": {
     "axios": "^1.12.2",
