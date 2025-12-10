@@ -1,7 +1,7 @@
 services:
   mongodb:
     image: mongo:6.0.18
-    container_name: lnbot-mongodb
+    container_name: livechat-mongodb
     restart: unless-stopped
     ports:
       - "27017:27017"
@@ -27,7 +27,7 @@ services:
     depends_on:
       - mongodb
     networks:
-      - lnbot-network
+      - livechat-network
 
 volumes:
   mongodb_data:
