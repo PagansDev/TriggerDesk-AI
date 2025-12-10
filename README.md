@@ -189,8 +189,8 @@ docker compose down
 docker compose down -v
 
 # Ver logs dos serviços
-docker logs lnbot-mongodb
-docker logs lnbot-mongo-express
+docker logs <nome-mongodb>
+docker logs <nome-mongo-express>
 
 # Reiniciar apenas o MongoDB
 docker compose restart mongodb
@@ -222,7 +222,7 @@ docker compose restart mongodb
 - Criação e busca de usuários com `externalUserId`
 - Controle de status online/offline em tempo real
 - Timestamp de última visualização
-- Suporte a múltiplas conversas por usuário(em desenvolvimento)
+- Suporte a múltiplas conversas por usuário
 
 ### Sistema de Conversas
 
@@ -394,7 +394,7 @@ A grande inovação está no **sistema de triggers automáticos** que funciona a
 - `create_ticket` - Cria ticket automaticamente
 - `close_conversation` - Fecha conversa quando resolvida
 - `flag_message` - adiciona ao contador de spam da conversa
-- `ban_user` - escala para suporte humano avaliar se bane ou não o usuário do chat por quebra grave de politica ou spam
+- `ban_user` - bane o usuário do chat por quebra grave de politica ou spam por 24h
 
 **Armazenamento em IndexedDB:**
 
@@ -455,13 +455,13 @@ O sistema implementa funcionalidades avançadas similares ao Chatwoot:
 - Múltiplas conversas por usuário
 - Histórico completo preservado
 - Status de conversas (active, closed, archived)
-- Atribuição de operador (em breve)
+- Atribuição de operador
 
 **2. Sistema de Tickets Integrado:**
 
 - Criação automática via triggers da IA
 - Priorização inteligente baseada no contexto
-- Assuntos pré-definidos com categorização
+- Assuntos definidos dinamicamente com categorização
 - Workflow completo de resolução
 
 **3. Mensagens Internas:**
@@ -491,6 +491,5 @@ socket.emit('send_message', {
 
 - O front end por sua vez precisa implementar os componentes de chat: ChatTrigger, ChatPopUp, ChatWindow, ChatMessage, tela para operadores de suporte
 - O sistema de interceptação de requsições com informações importantes e relevantes ao contexto do suporte e cacheamento no indexed db
+- Após definir a estrutura de dados das informações interceptadas pelo front-end, deverá ser criado no livechat o type de contexto de suporte que represente essa estrutura
 - O handler que irá buscar esses dados em cache e mandar via conexão websocket no envio da mensagem
-
-**Em breve serão disponibilizados em /integration arquivos feitos com os principais frameworks do mercado com toda a infraestrutura base pronta para implementação**
