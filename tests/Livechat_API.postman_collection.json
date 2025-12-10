@@ -1,0 +1,998 @@
+{
+  "info": {
+    "name": "Livechat API",
+    "description": "Collection para testar endpoints HTTP do Livechat\n\n⚠️ IMPORTANTE: Mensagens são criadas via WebSocket, não HTTP POST",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001/api",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "conversationId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "ticketId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "internalMessageId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "internalRoomId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "notificationId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "imageId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        },
+        "description": "Verifica status da API (sem autenticação)"
+      },
+      "response": []
+    },
+    {
+      "name": "Conversations",
+      "item": [
+        {
+          "name": "Listar Conversas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/conversations",
+              "host": ["{{baseUrl}}"],
+              "path": ["conversations"]
+            },
+            "description": "Lista todas as conversas (requer role: support/admin)"
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Conversas - Com Filtros",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/conversations?needHumanAttention=true&sortBy=lastMessageAt&order=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["conversations"],
+              "query": [
+                {
+                  "key": "needHumanAttention",
+                  "value": "true",
+                  "description": "Filtrar por atenção humana"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "lastMessageAt",
+                  "description": "Campo para ordenar"
+                },
+                {
+                  "key": "order",
+                  "value": "desc",
+                  "description": "asc ou desc"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "disabled": true,
+                  "description": "active, closed, archived"
+                },
+                {
+                  "key": "hasTicket",
+                  "value": "true",
+                  "disabled": true,
+                  "description": "true ou false"
+                }
+              ]
+            },
+            "description": "Lista conversas com filtros personalizados"
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Conversa por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/conversations/{{conversationId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["conversations", "{{conversationId}}"]
+            },
+            "description": "Busca detalhes de uma conversa específica (requer role: support/admin)"
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Mensagens da Conversa",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/conversations/{{conversationId}}/messages",
+              "host": ["{{baseUrl}}"],
+              "path": ["conversations", "{{conversationId}}", "messages"]
+            },
+            "description": "Lista mensagens normais (sem internal messages)"
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Conversa",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"needHumanAttention\": true,\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/conversations/{{conversationId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["conversations", "{{conversationId}}"]
+            },
+            "description": "Atualiza status e flags da conversa (requer role: support/admin)"
+          },
+          "response": []
+        },
+        {
+          "name": "Atribuir Operador",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operatorId\": \"uuid-ou-objectId\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/conversations/{{conversationId}}/assign",
+              "host": ["{{baseUrl}}"],
+              "path": ["conversations", "{{conversationId}}", "assign"]
+            },
+            "description": "Atribui ou remove operador. Para remover, envie operatorId como string vazia/null."
+          },
+          "response": []
+        },
+        {
+          "name": "Marcar Conversa como Lida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/conversations/{{conversationId}}/mark-read",
+              "host": ["{{baseUrl}}"],
+              "path": ["conversations", "{{conversationId}}", "mark-read"]
+            },
+            "description": "Zera contadores de não lidas para o usuário atual (requer suporte/admin)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tickets",
+      "item": [
+        {
+          "name": "Listar Tickets",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tickets",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets"]
+            },
+            "description": "Lista todos os tickets (requer role: support/admin)"
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Tickets - Com Filtros",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tickets?status=open&priority=high",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "open",
+                  "description": "open, in_progress, resolved, etc"
+                },
+                {
+                  "key": "priority",
+                  "value": "high",
+                  "description": "low, medium, high, urgent"
+                }
+              ]
+            },
+            "description": "Lista tickets com filtros"
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Ticket por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tickets/{{ticketId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "{{ticketId}}"]
+            },
+            "description": "Busca detalhes de um ticket específico (requer role: support/admin)"
+          },
+          "response": []
+        },
+        {
+          "name": "Criar Ticket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversationId\": \"{{conversationId}}\",\n  \"subject\": \"Problema com bot\",\n  \"description\": \"Bot não está funcionando corretamente\",\n  \"priority\": \"high\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tickets",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets"]
+            },
+            "description": "Cria um novo ticket (requer role: support/admin)"
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Ticket",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"in_progress\",\n  \"priority\": \"urgent\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tickets/{{ticketId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "{{ticketId}}"]
+            },
+            "description": "Atualiza status e prioridade do ticket (requer role: support/admin)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Internal Messages",
+      "item": [
+        {
+          "name": "Listar Notas Internas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/internal-messages/conversation/{{conversationId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["internal-messages", "conversation", "{{conversationId}}"]
+            },
+            "description": "Lista notas internas de uma conversa (requer role: support/admin)\n\n⚠️ Criar nota interna: Use WebSocket - socket.emit('internal:message', {...})"
+          },
+          "response": []
+        },
+        {
+          "name": "Editar Nota Interna",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Nota interna editada\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/internal-messages/{{internalMessageId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["internal-messages", "{{internalMessageId}}"]
+            },
+            "description": "Edita uma nota interna (requer role: support/admin)"
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Nota Interna",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/internal-messages/{{internalMessageId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["internal-messages", "{{internalMessageId}}"]
+            },
+            "description": "Deleta uma nota interna (requer role: support/admin)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Internal Conversations",
+      "item": [
+        {
+          "name": "Obter/Criar Sala Geral",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/internal-conversations/general",
+              "host": ["{{baseUrl}}"],
+              "path": ["internal-conversations", "general"]
+            },
+            "description": "Cria ou retorna a sala geral (requer role support/admin)."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Salas Internas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/internal-conversations",
+              "host": ["{{baseUrl}}"],
+              "path": ["internal-conversations"]
+            },
+            "description": "Lista salas internas (requer role support/admin)."
+          },
+          "response": []
+        },
+        {
+          "name": "Criar Sala Interna",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Suporte Nível 2\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/internal-conversations",
+              "host": ["{{baseUrl}}"],
+              "path": ["internal-conversations"]
+            },
+            "description": "Cria nova sala interna (requer role support/admin)."
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Sala Interna",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sala Atualizada\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/internal-conversations/{{internalRoomId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["internal-conversations", "{{internalRoomId}}"]
+            },
+            "description": "Atualiza sala interna (requer role support/admin)."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Mensagens da Sala Interna",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/internal-conversations/{{internalRoomId}}/messages",
+              "host": ["{{baseUrl}}"],
+              "path": ["internal-conversations", "{{internalRoomId}}", "messages"]
+            },
+            "description": "Lista mensagens de uma sala interna (requer role support/admin)."
+          },
+          "response": []
+        },
+        {
+          "name": "Enviar Mensagem para Sala Interna",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Mensagem interna\",\n  \"metadata\": {}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/internal-conversations/{{internalRoomId}}/messages",
+              "host": ["{{baseUrl}}"],
+              "path": ["internal-conversations", "{{internalRoomId}}", "messages"]
+            },
+            "description": "Envia mensagem para sala interna (requer role support/admin)."
+          },
+          "response": []
+        },
+        {
+          "name": "Marcar Sala Interna como Lida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/internal-conversations/{{internalRoomId}}/mark-read",
+              "host": ["{{baseUrl}}"],
+              "path": ["internal-conversations", "{{internalRoomId}}", "mark-read"]
+            },
+            "description": "Marca mensagens da sala interna como lidas (requer role support/admin)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Chat Notifications",
+      "item": [
+        {
+          "name": "Listar Não Lidas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/chat-notifications",
+              "host": ["{{baseUrl}}"],
+              "path": ["chat-notifications"]
+            },
+            "description": "Retorna notificações não lidas."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Todas (limitadas)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/chat-notifications/all",
+              "host": ["{{baseUrl}}"],
+              "path": ["chat-notifications", "all"]
+            },
+            "description": "Retorna notificações (limite interno no backend)."
+          },
+          "response": []
+        },
+        {
+          "name": "Contar Não Lidas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/chat-notifications/count",
+              "host": ["{{baseUrl}}"],
+              "path": ["chat-notifications", "count"]
+            },
+            "description": "Retorna contagem de notificações não lidas."
+          },
+          "response": []
+        },
+        {
+          "name": "Marcar Notificação como Lida",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/chat-notifications/{{notificationId}}/read",
+              "host": ["{{baseUrl}}"],
+              "path": ["chat-notifications", "{{notificationId}}", "read"]
+            },
+            "description": "Marca notificação como lida."
+          },
+          "response": []
+        },
+        {
+          "name": "Marcar Notificações de Conversa como Lidas",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/chat-notifications/conversation/{{conversationId}}/read",
+              "host": ["{{baseUrl}}"],
+              "path": ["chat-notifications", "conversation", "{{conversationId}}", "read"]
+            },
+            "description": "Marca notificações de uma conversa como lidas."
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Notificação",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/chat-notifications/{{notificationId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["chat-notifications", "{{notificationId}}"]
+            },
+            "description": "Remove notificação específica."
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Notificações de Conversa",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/chat-notifications/conversation/{{conversationId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["chat-notifications", "conversation", "{{conversationId}}"]
+            },
+            "description": "Remove notificações de uma conversa."
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Todas as Lidas",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/chat-notifications/read",
+              "host": ["{{baseUrl}}"],
+              "path": ["chat-notifications", "read"]
+            },
+            "description": "Remove notificações já lidas."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "item": [
+        {
+          "name": "Upload de Imagem",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/images/upload",
+              "host": ["{{baseUrl}}"],
+              "path": ["images", "upload"]
+            },
+            "description": "Faz upload de imagem (até 5MB)."
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Imagem",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/images/{{imageId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["images", "{{imageId}}"]
+            },
+            "description": "Recupera imagem por ID."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Buscar Conversas do Usuário",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/external/:userId/conversations",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "external", ":userId", "conversations"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "uuid-do-usuario",
+                  "description": "UUID do usuário (externalUserId)"
+                }
+              ]
+            },
+            "description": "Lista conversas de um usuário específico"
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Usuários de Suporte",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/support",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "support"]
+            },
+            "description": "Lista usuários com role support/admin."
+          },
+          "response": []
+        },
+        {
+          "name": "Criar Usuário",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"novo\",\n  \"email\": \"novo@exemplo.com\",\n  \"role\": \"support\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
+            },
+            "description": "Cria usuário."
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Usuário por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}"]
+            },
+            "description": "Retorna usuário por ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Banir Usuário",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}/ban",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}", "ban"]
+            },
+            "description": "Bane usuário (requer role support/admin)."
+          },
+          "response": []
+        },
+        {
+          "name": "Desbanir Usuário",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "accessToken={{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}/unban",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}", "unban"]
+            },
+            "description": "Remove banimento (requer role support/admin)."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

@@ -10,7 +10,15 @@ const TicketSchema = new Schema<ITicket>(
     },
     status: {
       type: String,
-      enum: ['open', 'in_progress', 'resolved', 'reopened', 'archived', 'closed'],
+      enum: [
+        'open',
+        'in_progress',
+        'waiting_dev_team',
+        'resolved',
+        'reopened',
+        'archived',
+        'closed',
+      ],
       default: 'open',
     },
     priority: {
@@ -28,9 +36,8 @@ const TicketSchema = new Schema<ITicket>(
       ref: 'User',
       default: null,
     },
-    subjectId: {
-      type: Schema.Types.ObjectId,
-      ref: 'TicketSubject',
+    subject: {
+      type: String,
       default: null,
     },
     lastUpdatedBy: {
@@ -53,6 +60,11 @@ const TicketSchema = new Schema<ITicket>(
       default: 0,
       min: 0,
     },
+    unreadCountByUser: {
+      type: Map,
+      of: Number,
+      default: new Map(),
+    },
   },
   {
     timestamps: true,
@@ -61,7 +73,6 @@ const TicketSchema = new Schema<ITicket>(
 );
 
 TicketSchema.index({ externalUserId: 1 });
-TicketSchema.index({ subjectId: 1 });
 TicketSchema.index({ priority: 1 });
 TicketSchema.index({ status: 1 });
 TicketSchema.index({ createdAt: -1 });

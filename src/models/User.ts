@@ -14,9 +14,42 @@ const UserSchema = new Schema<IUser>(
       unique: true,
       maxlength: 100,
     },
+    role: {
+      type: String,
+      enum: ['user', 'support', 'admin'],
+      default: 'user',
+    },
+    email: {
+      type: String,
+      default: null,
+    },
     isOnline: {
       type: Boolean,
       default: false,
+    },
+    isBanned: {
+      type: Boolean,
+      default: false,
+    },
+    bannedAt: {
+      type: Date,
+      default: null,
+    },
+    bannedUntil: {
+      type: Date,
+      default: null,
+    },
+    banReason: {
+      type: String,
+      default: null,
+    },
+    imageUploadWarnings: {
+      type: Number,
+      default: 0,
+    },
+    lastImageWarningAt: {
+      type: Date,
+      default: null,
     },
     lastSeen: {
       type: Date,
@@ -28,8 +61,6 @@ const UserSchema = new Schema<IUser>(
     collection: 'users',
   }
 );
-
-UserSchema.index({ externalUserId: 1 });
 
 const User = mongoose.model<IUser>('User', UserSchema);
 

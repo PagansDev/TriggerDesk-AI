@@ -37,7 +37,7 @@ class PromptLoaderService {
       this.systemPromptBase = promptParts.join('\n\n');
       this.isLoaded = true;
 
-      console.log('[PromptLoader] Prompts do sistema carregados com sucesso');
+      console.log('[PromptLoader] ✓ Prompts do sistema carregados com sucesso');
       console.log(
         `[PromptLoader] Total de caracteres: ${this.systemPromptBase.length}`
       );
@@ -55,10 +55,10 @@ class PromptLoaderService {
 
     try {
       const content = await fs.readFile(filePath, 'utf-8');
-      console.log(`[PromptLoader] Carregado: ${filename}`);
+      console.log(`[PromptLoader] ✓ Carregado: ${filename}`);
       return content.trim();
     } catch (error) {
-      console.error(`[PromptLoader] Erro ao carregar ${filename}:`, error);
+      console.error(`[PromptLoader] ✗ Erro ao carregar ${filename}:`, error);
       throw new Error(`Falha ao carregar arquivo de prompt: ${filename}`);
     }
   }

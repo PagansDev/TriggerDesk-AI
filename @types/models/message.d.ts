@@ -5,7 +5,6 @@ export type MessageType = 'text' | 'image' | 'file' | 'system';
 export interface IMessage extends Document {
   _id: Types.ObjectId;
   conversationId: Types.ObjectId;
-  ticketId?: Types.ObjectId;
   senderId: Types.ObjectId;
   content: string;
   messageType: MessageType;
@@ -18,7 +17,6 @@ export interface IMessage extends Document {
 
 export interface MessageInput {
   conversationId: Types.ObjectId;
-  ticketId?: Types.ObjectId;
   senderId: Types.ObjectId;
   content: string;
   messageType?: MessageType;

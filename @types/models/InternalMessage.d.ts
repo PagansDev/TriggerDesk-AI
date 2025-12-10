@@ -9,7 +9,9 @@ export interface IInternalMessage extends Document {
   senderId: Types.ObjectId;
   content: string;
   messageType: MessageType;
+  isInternal: boolean;
   isEdited: boolean;
+  isFixed: boolean;
   metadata?: Record<string, any>;
   createdAt: Date;
   updatedAt: Date;
@@ -21,6 +23,8 @@ export interface InternalMessageInput {
   senderId: Types.ObjectId;
   content: string;
   messageType?: MessageType;
+  isInternal?: boolean;
   isEdited?: boolean;
+  isFixed?: boolean;
   metadata?: Record<string, any>;
 }

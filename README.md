@@ -100,7 +100,7 @@ O sistema utiliza prompts modulares organizados em arquivos Markdown para facili
 - **01-base-identity.md** - Identidade e propósito da IA
 - **02-response-format.md** - Formato obrigatório de resposta JSON
 - **03-definitions.md** - Definições técnicas e terminologia
-- **04-business-flow-summary.md** - Manual completo de automações BitDesk
+- **04-business-flow-summary.md** - Manual completo de lógica de negócio
 - **05-behavioral-rules.md** - Regras comportamentais da IA
 
 ### Características
@@ -211,8 +211,8 @@ docker compose restart mongodb
 
 - **Respostas estruturadas em JSON** com campos obrigatórios (status, action, priority, reply)
 - **Prompts modulares** carregados dinamicamente de arquivos Markdown
-- **Contexto de suporte** com dados em tempo real (taxas de câmbio, configurações do usuário)
-- **Especialização em BitDesk** com conhecimento técnico sobre automações de trading
+- **Contexto de suporte** com dados em tempo real definidos pela implementação do contexto de suporte
+- **Especialização** com conhecimento técnico passado pelos arquivos .md que você definir
 - **Trigger de ações** no backend baseado no campo "action" da resposta JSON
 - **Configuração flexível** de modelos de IA via OpenRouter
 

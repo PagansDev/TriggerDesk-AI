@@ -27,7 +27,16 @@ const InternalMessageSchema = new Schema<IInternalMessage>(
       enum: ['text', 'image', 'file', 'system'],
       default: 'text',
     },
+    isInternal: {
+      type: Boolean,
+      default: true,
+      required: true,
+    },
     isEdited: {
+      type: Boolean,
+      default: false,
+    },
+    isFixed: {
       type: Boolean,
       default: false,
     },

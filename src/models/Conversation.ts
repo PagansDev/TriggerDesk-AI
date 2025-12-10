@@ -13,6 +13,16 @@ const ConversationSchema = new Schema<IConversation>(
       ref: 'User',
       required: true,
     },
+    ticketId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Ticket',
+      required: false,
+    },
+    assignedTo: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: false,
+    },
     title: {
       type: String,
       required: true,
@@ -31,9 +41,25 @@ const ConversationSchema = new Schema<IConversation>(
       type: Boolean,
       default: false,
     },
+    isInternal: {
+      type: Boolean,
+      default: false,
+    },
     spamCount: {
       type: Number,
       default: 0,
+    },
+    needHumanAttention: {
+      type: Boolean,
+      default: false,
+    },
+    unreadCount: {
+      type: Number,
+      default: 0,
+    },
+    metadata: {
+      type: Schema.Types.Mixed,
+      default: null,
     },
   },
   {

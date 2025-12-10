@@ -8,11 +8,6 @@ const MessageSchema = new Schema<IMessage>(
       ref: 'Conversation',
       required: true,
     },
-    ticketId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Ticket',
-      required: false,
-    },
     senderId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
@@ -20,7 +15,7 @@ const MessageSchema = new Schema<IMessage>(
     },
     content: {
       type: String,
-      required: true,
+      default: '',
     },
     messageType: {
       type: String,
@@ -49,6 +44,22 @@ const MessageSchema = new Schema<IMessage>(
 MessageSchema.index({ conversationId: 1, createdAt: -1 });
 MessageSchema.index({ senderId: 1 });
 MessageSchema.index({ messageType: 1 });
+
+// Validação customizada para permitir content vazio em mensagens de imagem
+MessageSchema.pre('validate', function(next) {
+  // Se for mensagem de imagem, garantir que content seja string vazia se não foi fornecido
+  if (this.messageType === 'image' && (this.content == null || this.content === '')) {
+    this.content = '';
+    return next();
+  }
+
+  // Para outros tipos de mensagem, garantir que content não esteja vazio
+  if (this.messageType !== 'image' && (!this.content || this.content.trim().length === 0)) {
+    return next(new Error('Content é obrigatório para mensagens de texto'));
+  }
+
+  next();
+});
 
 const Message = mongoose.model<IMessage>('Message', MessageSchema);
 
