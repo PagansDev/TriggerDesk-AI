@@ -1,4 +1,4 @@
-# PagansDev - LiveChat
+# TriggerDesk-AI
 
 Sistema de chat em tempo real com integração de IA especializada para atendimento ao cliente, desenvolvido com Node.js, TypeScript, Socket.IO e MongoDB.
 
@@ -19,7 +19,7 @@ Sistema de chat em tempo real com integração de IA especializada para atendime
 ## Estrutura do Projeto
 
 ```
-pagansdev-livechat/
+TriggerDesk-AI/
 ├── src/                      # Código fonte da aplicação
 │   ├── app.ts               # Inicialização do Express + Socket.IO
 │   ├── config/
@@ -163,7 +163,7 @@ TICKET_AUTO_ASSIGN=true
 TICKET_PRIORITY_DEFAULT=medium
 
 
-#JWT SECRET (MESMO DO BACKEND do sistema a ser integrado)
+#JWT SECRET (MESMO DO BACKEND do sistema a ser integrado, aproveita autenticação do front-end)
 JWT_SECRET=
 ```
 
@@ -335,7 +335,7 @@ socket.on('error', (error) => {
 ### Criação de Usuário via websocket
 
 - O front-end envia junto a conexão de websocket dados como userId, ou cookie/token a ser decodificado
-- O livechat possui uma cópia do secret do backend que é usado para validar e resgatar dados do token sem interação necessária com backend original
+- O TriggerDesk-AI possui uma cópia do secret do backend que é usado para validar e resgatar dados do token sem interação necessária com backend original
 - Tendo o userId em mão, o sistema o trata como externalUserId a partir de então, e é criado um usuário com esse campo que serve como pivô entre os dois serviços.
 
 ## Scripts Disponíveis
@@ -491,5 +491,5 @@ socket.emit('send_message', {
 
 - O front end por sua vez precisa implementar os componentes de chat: ChatTrigger, ChatPopUp, ChatWindow, ChatMessage, tela para operadores de suporte
 - O sistema de interceptação de requsições com informações importantes e relevantes ao contexto do suporte e cacheamento no indexed db
-- Após definir a estrutura de dados das informações interceptadas pelo front-end, deverá ser criado no livechat o type de contexto de suporte que represente essa estrutura
+- Após definir a estrutura de dados das informações interceptadas pelo front-end, deverá ser criado no TriggerDesk-AI o type de contexto de suporte que represente essa estrutura
 - O handler que irá buscar esses dados em cache e mandar via conexão websocket no envio da mensagem
